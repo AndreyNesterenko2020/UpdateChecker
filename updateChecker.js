@@ -1,10 +1,10 @@
-//update checker version 1.0, for discord webhooks
+//update checker version 1.1, for discord webhooks
 
 var request = require('request');
 var discord = require('discord.js');
-var configuration = {target: "https://venge.io/changes.txt", webhook: false, roleID: 0}
+var configuration = {target: "https://venge.io/changes.txt", webhook: false, roleID: 0, delay: 1800000}
 try {
-  configuration = require('./config.js'); //config file must export the target url, the webhook url, and the roleID
+  configuration = require('./config.js'); //config file must export the target url, the webhook url, the roleID, and optionally the time in ms between every check (delay)
 } catch (e) {}
 
 var webhook = configuration.webhook && new discord.WebhookClient({url: configuration.webhook});
@@ -24,6 +24,6 @@ function fireWebhook(data) {
 }
 function main() {
   get();
-  setTimeout(main, 1800000);
+  setTimeout(main, configuration.delay || 1800000);
 }
 main();
